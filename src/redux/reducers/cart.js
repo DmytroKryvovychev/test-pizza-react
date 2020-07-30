@@ -6,16 +6,40 @@ const initialState = {
 
 const cart = (state = initialState, action) => {
   switch (action.type) {
-    case 'SET_TOTAL_PRICE':
+    case 'ADD_PIZZA_CART': {
+      const newItems = {
+        ...state.items,
+        [action.payload.id]: !state.items[action.payload.id]
+          ? [action.payload]
+          : [...state.items[action.payload.id], action.payload],
+      };
+
+      // const totalCount = Object.values(newItems).reduce((sum, item) => {
+      //   return sum + item.length;
+      // }, 0);  //MyCode ^.^ veryNovice
+
+      // const totalPrice = Object.values(newItems).reduce((sum, item) => {
+      //   const price = item.reduce((sum, item) => {
+      //     return sum + item.price;
+      //   }, 0);
+      //   return sum + price;
+      // }, 0); //MyCode ^.^ veryNovice
+
+      const allPizzas = [].concat.apply([], Object.values(newItems));
+
+      const totalPrice = allPizzas.reduce((sum, obj) => {
+        return sum + obj.price;
+      }, 0);
+
+      const totalCount = allPizzas.length;
+
       return {
         ...state,
-        totalPrice: action.payload,
+        items: newItems,
+        totalPrice,
+        totalCount,
       };
-    case 'SET_TOTAL_COUNT':
-      return {
-        ...state,
-        totalCount: action.payload,
-      };
+    }
     default:
       return state;
   }
