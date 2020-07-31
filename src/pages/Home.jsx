@@ -23,15 +23,21 @@ function Home() {
 
   React.useEffect(() => {
     dispatch(fetchPizzas(sortBy, category));
-  }, [category, sortBy]);
+  }, [category, sortBy, dispatch]);
 
-  const onSelectCategory = React.useCallback((index) => {
-    dispatch(setCategory(index));
-  }, []);
+  const onSelectCategory = React.useCallback(
+    (index) => {
+      dispatch(setCategory(index));
+    },
+    [dispatch],
+  );
 
-  const onSelectSortType = React.useCallback((type) => {
-    dispatch(setSortBy(type));
-  }, []);
+  const onSelectSortType = React.useCallback(
+    (type) => {
+      dispatch(setSortBy(type));
+    },
+    [dispatch],
+  );
 
   const handleAddPizzaToCart = (obj) => {
     dispatch(addPizzaToCart(obj));
@@ -59,7 +65,7 @@ function Home() {
                 onClickAddPizza={handleAddPizzaToCart}
                 key={obj.id}
                 {...obj}
-                addedCount={cartItems[obj.id] && cartItems[obj.id].length}
+                addedCount={cartItems[obj.id] && cartItems[obj.id].items.length}
               />
             ))
           : Array(12)
